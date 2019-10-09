@@ -25,15 +25,15 @@ apiclient=(function(){
 				error: err
 			});
 		},
-		consultarUsuario:function(user,token){
-			console.log(user)
+		consultarDriver:function(driver,token,callback){
+			console.log(driver)
 			$.ajax({
 				method: "GET",
 				contentType: "application/json",
-				url: "https://synchdrive.herokuapp.com/users/"+user,
+				url: "https://synchdrive.herokuapp.com/drivers/"+driver,
 				headers: { "Authorization": token},
 				success: function(respuesta) {
-					console.log(respuesta);
+					callback(respuesta)
 				},
 				error: function() {
 					console.log("No se ha podido obtener la información");

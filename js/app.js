@@ -11,13 +11,13 @@ app = (function () {
         sessionStorage.setItem('token',"Bearer "+data["token"])
         sessionStorage.setItem('email',email)
         console.log(sessionStorage.getItem('token'))
-        apiclient.consultarUsuario(sessionStorage.getItem('email'),sessionStorage.getItem('token'))
+        apiclient.consultarDriver(sessionStorage.getItem('email'),sessionStorage.getItem('token'))
         alert("Ha sido Login exitosamente");
         location.href = "perfilDriver.html";
        
     }
     var cargarDatos= function (data) {
-        apiclient.consultarUsuario(sessionStorage.getItem('email'),sessionStorage.getItem('token'),actualizarPerfil)
+        apiclient.consultarDriver(sessionStorage.getItem('email'),sessionStorage.getItem('token'),actualizarPerfil)
     }
     var actualizarPerfil=function(funcion){
         $("#UserName").val(funcion["userName"]);
