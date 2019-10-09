@@ -16,6 +16,11 @@ app = (function () {
         location.href = "perfilDriver.html";
        
     }
+    var LogOut=function (data) {
+        sessionStorage.clear('token');
+        sessionStorage.clear('email');
+        location.href = "loginDriver.html";
+    }
     var cargarDatos= function (data) {
         apiclient.consultarDriver(sessionStorage.getItem('email'),sessionStorage.getItem('token'),actualizarPerfil)
     }
@@ -68,6 +73,8 @@ app = (function () {
             return apiclient.registroConductor(conductor, onSucessRegistro,
                 onErrorRegistro);
         },
-        cargarDatos:cargarDatos
+        cargarDatos:cargarDatos,
+        LogOut:LogOut
+
     }
 })();
