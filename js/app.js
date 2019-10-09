@@ -5,7 +5,7 @@ app = (function () {
     var email; 
     var onSucessRegistro = function (data) {
         alert("Ha sido registrado exitosamente");
-        location.href = "login.html";
+        location.href = "loginDriver.html";
     }
     var onSucessLoing = function (data) {
         sessionStorage.setItem('token',"Bearer "+data["token"])
