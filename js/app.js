@@ -13,8 +13,21 @@ app = (function () {
         console.log(sessionStorage.getItem('token'))
         apiclient.consultarUsuario(sessionStorage.getItem('email'),sessionStorage.getItem('token'))
         alert("Ha sido Login exitosamente");
-        location.href = "perfilUser.html";
+        location.href = "perfilDriver.html";
        
+    }
+    var cargarDatos= function (data) {
+        apiclient.consultarUsuario(sessionStorage.getItem('email'),sessionStorage.getItem('token'),actualizarPerfil)
+    }
+    var actualizarPerfil=function(funcion){
+        $("#UserName").val(funcion["userName"]);
+        $("#Email").val(funcion["email"]);
+        $("#FirstName").val(funcion["firstName"]);
+        $("#LastName").val(funcion["lastName"]);
+        $("#CellPhone").val(funcion["cellPhone"]);
+        $("#telefono").text(funcion["cellPhone"]);
+        $("#nombre").text(funcion["userName"]);
+        $("#correo").text(funcion["email"]);
     }
     var onErrorLogin = function (data) {
         alert("No se pudo realizar el login correctamente");
@@ -40,38 +53,9 @@ app = (function () {
         return apiclient.loginUser(loginData, onSucessLoing,
             onErrorLogin);
     },
-
-
-
-
-        loginUserAndConductor: function (name) {
-            var user = {
-                "email": $('#correo').val(),
-                "password": $('#contrasena').val(),
-            };
-            user = JSON.stringify(user); //parsea a formato JSON
-            if(console.log(document.getElementsByName('Tusuario')[0].checked)){
-
-            }else if(console.log(document.getElementsByName('Tusuario')[1].checked)){
-
-            }
-        },
-
         /*
             FUNCIONES DE REGISTRO
         */
-        addUser: function (name) {
-            var user = {
-                "email": $('#correo').val(),
-                "userName": $('#nombre').val(),
-                "password": $('#contrasena').val(),
-            };
-            console.log(user)
-            user = JSON.stringify(user); //parsea a formato JSON
-            return apiclient.registroUser(user, onSucessRegistro,
-                onErrorRegistro);
-        },
-
         registroConductor: function (name) {
             var conductor = {
                 "email": $('#correo').val(),
@@ -83,21 +67,7 @@ app = (function () {
             conductor = JSON.stringify(conductor); //parsea a formato JSON
             return apiclient.registroConductor(conductor, onSucessRegistro,
                 onErrorRegistro);
-        }
+        },
+        cargarDatos:cargarDatos
     }
 })();
-function tokenSet(){
-    return "Bearer " + token; //deja el token con 'bearer' para el back
-}
-
-function consultarApi(){
-    token = tokenSet();
-    console.log(token);
-    $.ajax({
-        type: "GET",
-        url: "http://localhost:8080/cars",
-        headers: { "Authorization": token} //Header de autorización
-      }).done(function(data){
-          console.log(data);
-      });
-}
