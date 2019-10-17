@@ -22,7 +22,13 @@ app = (function () {
         location.href = "loginDriver.html";
     }
     var cargarDatos= function (data) {
-        apiclient.consultarDriver(sessionStorage.getItem('email'),sessionStorage.getItem('token'),actualizarPerfil)
+        if (sessionStorage.getItem('email') == null ){
+            alert("Permiso denegado, debe logearse primero.")
+            location.href = "/loginDriver.html"
+        }else{
+            apiclient.consultarDriver(sessionStorage.getItem('email'),sessionStorage.getItem('token'),actualizarPerfil)
+        }
+       
     }
     var actualizarPerfil=function(funcion){
         $("#UserName").val(funcion["userName"]);
