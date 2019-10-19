@@ -7,6 +7,15 @@ app = (function () {
         alert("Ha sido registrado exitosamente");
         location.href = "loginDriver.html";
     }
+    var onErrorUpdate = function (data) {
+        alert("No se pudo realizar la actualizacion  correctamente");
+        location.href = "perfilDriver.html";
+    }
+    var onSucessUpdate = function (data) {
+        alert("Ha sido actualizado exitosamente");
+        location.href = "perfilDriver.html";
+    }
+    
     var onSucessLoing = function (data) {
         sessionStorage.setItem('token',"Bearer "+data["token"])
         sessionStorage.setItem('email',email)
@@ -31,6 +40,12 @@ app = (function () {
        
     }
     var actualizarPerfil=function(funcion){
+        console.log(funcion)
+        chk=funcion["apps"]
+        for(i=0;i<chk.length;i++){
+            ch=document.getElementById(chk[i]["name"]);
+            ch.checked=1
+        }
         $("#UserName").val(funcion["userName"]);
         $("#Email").val(funcion["email"]);
         $("#FirstName").val(funcion["firstName"]);
@@ -48,6 +63,31 @@ app = (function () {
     var onErrorRegistro = function (data) {
         alert("No se pudo realizar el registro correctamente");
         location.href = "";
+    }
+    var updateDatos = function (data) {
+        list= []
+        chk=document.getElementsByName('Tcuenta');
+        for(i=0;i<chk.length;i++){
+            if(chk[i].checked){
+                elemento={"name":chk[i].id}
+                list.push(elemento)
+            }
+               
+        }
+        
+        var json = {
+            "email": $("#Email").val(),
+            "firstName": $("#FirstName").val(),
+            "lastName": $("#LastName").val() , 
+            "userName":  $("#UserName").val(), 
+            "cellPhone": $("#CellPhone").val(),
+            "apps":list,
+            "cars":[]
+        }
+        updateData=JSON.stringify(json);
+        console.log(updateData)
+        return apiclient.updateDriver(updateData, onSucessUpdate,
+            onErrorUpdate);
     }
 
     return {
@@ -80,7 +120,8 @@ app = (function () {
                 onErrorRegistro);
         },
         cargarDatos:cargarDatos,
-        LogOut:LogOut
+        LogOut:LogOut,
+        updateDatos:updateDatos
 
     }
 })();
