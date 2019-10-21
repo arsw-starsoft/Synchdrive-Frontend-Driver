@@ -59,9 +59,91 @@
                 </ul>
             </div>
         </div>
-        <div class="main-panel">
-                <div id="map" style="width: 100%; height: 100%;"></div>
+        <div class="container-fluid" style="width: 55%; 
+        height: 15%;float: left; border:black;  
+        border-style: solid;
+        position: absolute ; left: 20%;">
+            <form>
+                <br>
+                <center>
+                   
+                    <input type="button" value="Activate Service" class="btn float-none login_btn" onclick="">
+                </center>
+            </form>
+
         </div>
+        <div class="container-fluid" style="width: 25%; 
+        height: 100%;float: left; 
+        border:black;  border-style: solid;
+        position: absolute;
+        left:75%;">
+            <form>
+                    Application:
+                    <div class="row">
+                        <br>
+                        <div class="col-md-2">
+                            <input type="checkbox" class="check" name="Tcuenta" value="1" id="beat"> Beat
+                            <!--<img src="/imagenes/Beat.png" alt="..." class="imgRedonda-off" id="beat-imagen"  onclick="checkCuentas(1)">-->
+                        </div>
+                        <div class="col-md-2">
+                            <input type="checkbox" class="check" name="Tcuenta" value="2" id="uber"> Uber
+                            <!--<img src="/imagenes/uber.png" alt="..."  class="imgRedonda-off" id="uber-imagen" onclick="checkCuentas(2)" >-->
+                        </div>
+                        <div class="col-md-2">
+                            <input type="checkbox" class="check" name="Tcuenta" value="3" id="didi"> Didi
+                            <!--<img src="/imagenes/Didi.png" alt="..." class="imgRedonda-off" id="didi-imagen" onclick="checkCuentas(3)">-->
+                        </div>
+
+                    </div>
+                <br>
+                <center>
+                    Notificacion de Carreras: 
+                </center>
+
+            </form>
+        </div>
+        <div class="container-fluid" style="width: 75%; height: 60%;float: left; border:black; 
+         border-style: solid; position: absolute; top:15%;">
+            <div class="main-panel">
+                <div id="map" style="width: 100%; height: 100%;"></div>
+            </div>
+        </div>
+        <div class="container-fluid" style="width: 54%; height: 25%;float: left; border:black; 
+         border-style: solid; position: absolute;
+        left:21%; top: 75%;">
+            <form>
+              
+                   Service:
+                    <div class="row">
+                       
+                        <br>
+                        <div class="col-md-12">
+                            <input type="checkbox" class="check" name="Tcuenta" value="1" id="beat"> More Expensive Careers
+                            <!--<img src="/imagenes/Beat.png" alt="..." class="imgRedonda-off" id="beat-imagen"  onclick="checkCuentas(1)">-->
+                        </div>
+                  
+                        
+
+                    </div>
+                    Destination
+                    <br>
+                    <div class="row">
+                       
+                           
+                            <div class="col-md-12">
+                                <input type="checkbox" class="check" name="Tcuenta" value="2" id="uber"> Nearby Destination:
+                                <!--<img src="/imagenes/uber.png" alt="..."  class="imgRedonda-off" id="uber-imagen" onclick="checkCuentas(2)" >-->
+                            </div>
+                            <div class="col-md-12">
+                                    Destination: <input type="text" > 
+                                    <!--<img src="/imagenes/uber.png" alt="..."  class="imgRedonda-off" id="uber-imagen" onclick="checkCuentas(2)" >-->
+                                </div>
+    
+                        </div>
+                
+            </form>
+        </div>
+    </div>
         
     </div>
     <script>
