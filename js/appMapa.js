@@ -32,13 +32,21 @@ appMapa = (function () {
     var menuNservices = function () {
         var elementos = "";
 
-        elementos = ' <input type="radio" name="NServices" id="OneDriver">' +
-            '<label for="OneDriver">One Driver</label>' +
-            '<input type="radio" name="NServices" id="TwoDriver">' +
-            '<label for="TwoDriver">Two Driver</label>' +
-            ' <input type="radio" name="NServices" id="ThreeDriver">' +
-            ' <label for="ThreeDriver">Three Driver</label>';
-        $("#nservices").html(elementos)
+        elementos = ' <input type="radio" name="TServices" id="MoreExpensiveCareers" onclick="appMapa.cargarFiltroDestino()">' +
+            '<label for="MoreExpensiveCareers">More Expensive Careers</label>' +
+            '<input type="radio" name="TServices" id="NearbyDestination" onclick="appMapa.cargarFiltroDestino()">' +
+            '<label for="NearbyDestination">Nearby Destination</label>'+
+            '<input type="radio" name="TServices" id="AllServices" onclick="appMapa.cargarFiltroDestino()">' +
+            '<label for="AllServices">All Services</label>';
+            
+        $("#Tservices").html(elementos)
+    }
+    var cargarFiltroDestino=function(){
+        var elemento=""
+        if($("#NearbyDestination").is(':checked')){
+            elemento='<label>Destination:</label>  <input id="Destination" type="text">';
+        }
+        $("#Ldestino").html(elemento)
     }
     return {
         getCordenadas: function (name) {
@@ -52,11 +60,13 @@ appMapa = (function () {
                     maximumAge: 0
                 };
                 apiclient.consultarDriver(sessionStorage.getItem('email'),sessionStorage.getItem('token'),menu)
+                appService.cargarFiltros()
                 return navigator.geolocation.getCurrentPosition(cordenadaSuccess, cordenadasError, options);
             }
         },
         menu:menu,
-        menuNservices:menuNservices
+        menuNservices:menuNservices,
+        cargarFiltroDestino:cargarFiltroDestino
 
     }
 

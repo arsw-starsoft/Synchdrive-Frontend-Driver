@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>User</title>
+    <title>Driver</title>
     <link href="css/map.css" rel="stylesheet" />
     <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
         integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
@@ -22,7 +22,7 @@
         integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
     <!--Custom styles-->
     <link href="css/light-bootstrap-dashboard.css?v=2.0.0 " rel="stylesheet" />
-    <link href="css/cuentas.css" rel="stylesheet" />
+    <link href="css/pageMap.css" rel="stylesheet" />
     <link href="css/map.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
@@ -70,29 +70,40 @@
             <form>
                 <br>
                 <center>
-                   
-                    <input type="button" value="Activate Service" class="btn float-none login_btn" onclick="appService.initConexion()">
+                    <div id="BuscarServicio">
+                        <input type="button" value="Activate Service" class="btn float-none login_btn"
+                            onclick="appService.initConexion()">
+                    </div>
+
                 </center>
             </form>
 
         </div>
-        
+
         <div class="container-fluid" style="width: 25%; 
         height: 100%;float: left; 
         border:black;  border-style: solid;
         position: absolute;
         left:75%;">
-        Applications:
-            <form action="" class="formulario">
-                <div class="checkbox" id="aplicaciones">
-                    <!--<input type="checkbox" name="checkbox" id="checkbox1" >
-                    <label for="checkbox1">Uber</label>
-                    <input type="checkbox" name="checkbox2" id="checkbox2">
-                    <label for="checkbox2">Didi</label>
-                    <input type="checkbox" name="checkbox3" id="checkbox3">
-                    <label for="checkbox3">Beat</label>-->
-                </div>
-            </form>
+        <center>
+                <label for="">Applications:</label>
+                <form action="" class="formulario">
+                    <div class="checkbox" id="aplicaciones">
+                        <!--<input type="checkbox" name="checkbox" id="checkbox1" >
+                        <label for="checkbox1">Uber</label>
+                        <input type="checkbox" name="checkbox2" id="checkbox2">
+                        <label for="checkbox2">Didi</label>
+                        <input type="checkbox" name="checkbox3" id="checkbox3">
+                        <label for="checkbox3">Beat</label>-->
+                    </div>
+                </form>
+                <table class="table" id="ServiceRequests:">
+                        <div id="serviciosActivos"></div>
+                        
+                </table>        
+                
+        </center>
+            
         </div>
         <div class="container-fluid" style="width: 75%; height: 60%;float: left; border:black; 
          border-style: solid; position: absolute; top:15%;">
@@ -103,39 +114,25 @@
         <div class="container-fluid" style="width: 54%; height: 25%;float: left; border:black; 
          border-style: solid; position: absolute;
         left:21%; top: 75%;">
-            <form>
-              
-                   Service:
-                    <div class="row">
-                        <br>
-                        <div class="col-md-12">
-                            <input type="checkbox" class="check" name="Tcuenta" value="1" id="beat"> More Expensive Careers
-                            <!--<img src="/imagenes/Beat.png" alt="..." class="imgRedonda-off" id="beat-imagen"  onclick="checkCuentas(1)">-->
-                        </div>
-                  
-                        
+            <center>
+                <label for=""> Servicie: </label>
+            </center>
+            <form action="" class="formulario" id="filtrosDriver">
+                <div class="radio" id="Tservices">
 
-                    </div>
-                    Destination
-                    <br>
-                    <div class="row">
-                       
-                           
-                            <div class="col-md-12">
-                                <input type="checkbox" class="check" name="Tcuenta" value="2" id="uber"> Nearby Destination:
-                                <!--<img src="/imagenes/uber.png" alt="..."  class="imgRedonda-off" id="uber-imagen" onclick="checkCuentas(2)" >-->
-                            </div>
-                            <div class="col-md-12">
-                                    Destination: <input type="text" > 
-                                    <!--<img src="/imagenes/uber.png" alt="..."  class="imgRedonda-off" id="uber-imagen" onclick="checkCuentas(2)" >-->
-                                </div>
-    
-                        </div>
-                
+                </div>
             </form>
+            <center>
+                <div id="Ldestino">
+                    
+
+                </div>
+            </center>
+
+
         </div>
     </div>
-        
+
     </div>
     <script>
         var map = L.map('map').setView([4.701979, -74.129346], 13);
@@ -146,4 +143,5 @@
     <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCXtqmOjaBay51oVsnslfDd2Nxc92JV5qo&callback=iniciarMap"></script>-->
 </body>
 <!--   Core JS Files   -->
+
 </html>
