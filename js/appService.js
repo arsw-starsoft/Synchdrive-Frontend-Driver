@@ -58,45 +58,46 @@ appService = (function () {
             }
         });
         
-        console.log("Connecting to WS...");
-        listApps.sort(); //Ordenar para el back message  uber didi beat
-        var stringMessage = "";
-        listApps.forEach(function (app) {
-            stringMessage += "." + app.toLowerCase();
-        });
-        console.log(stringMessage);
         var socket = new SockJS("https://synchdrive.herokuapp.com/stompendpoint");
         stompClient = Stomp.over(socket);
         stompClient.connect({}, function (frame) {
             console.log("Connected: " + frame);
-            stompClient.subscribe("/topic/services" + stringMessage, function (eventBody) {
-                var object = JSON.parse(eventBody.body);
-                console.log(object);
-                appService.mostrarServicios(object);
+            listApps.forEach(function (app) {
+                console.log("Subscribing to " + app.toLowerCase());
+                stompClient.subscribe("/topic/services." + app.toLowerCase(), function (eventBody) {
+                    var object = JSON.parse(eventBody.body);
+                    serviciosActivos=object;
+                    mostrarServicios();
+                });
             });
         });
     };
-    var mostrarServicios=function(serv){
+    var mostrarServicios=function(){
         var elemento='<thead><tr><th scope="col"><label for="">Service Requests:</label></th></tr><thead><tbody>';
-        if(serviciosActivos.length>9){
-            serviciosActivos.pop()
-            serviciosActivos.unshift(serv)
-        }else{
-            serviciosActivos.unshift(serv)
-        }
+        
         serviciosActivos.map(function(f){
+            console.log(f.idService)
             elemento+= '<tr><td >'+
             "Email: "+f.customer.email+'<br>'+
             "User Name: "+f.customer.userName+'<br>'+
             "Price: "+f.price+'<br>'+
             "Duration; "+f.duration+'<br>'+
-            '<input type="button" value="Accept Service" ></input><br>'+
+            '<input type="button" value="Accept Service"  onclick="appService.aceptarService('+f.idService+')"></input><br>'+
             '</td></tr>';
         });
         elemento+='</tbody>';
         
        
         $("#serviciosActivos").html(elemento);
+    };
+    var aceptarService=function(id){
+        serviciosActivos.map(function(f){
+            if(f.idService==id){
+                //apiclient.aceptarService()
+                console.log(f)
+            }
+        });
+        
     }
     return {
         connectAndSubscribeDriver: connectAndSubscribeDriver,
@@ -104,7 +105,8 @@ appService = (function () {
         BuscandoServicio:BuscandoServicio,
         cancelarBusqueda:cancelarBusqueda,
         cargarFiltros:cargarFiltros, 
-        mostrarServicios:mostrarServicios
+        mostrarServicios:mostrarServicios,
+        aceptarService:aceptarService
     }
 
 })();

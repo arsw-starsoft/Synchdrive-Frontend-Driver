@@ -53,7 +53,22 @@ apiclient = (function () {
 				success: succ,
 				error: err
 			});
+		},
+		aceptarService:function (datos,app,succ, err) {
+			console.log(datos)
+			console.log(sessionStorage.getItem('email'))
+			console.log(sessionStorage.getItem('token'))
+			$.ajax({
+				method: "PUT",
+				contentType: "application/json; charset=utf-8", //importante para el backs
+				data: datos,
+				url: "https://synchdrive.herokuapp.com/" + sessionStorage.getItem('email')+"/"+app,
+				headers: { "Authorization": sessionStorage.getItem('token') },
+				success: succ,
+				error: err
+			});
 		}
+		
 
 	}
 })();
