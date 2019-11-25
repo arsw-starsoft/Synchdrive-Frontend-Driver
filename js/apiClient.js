@@ -67,7 +67,24 @@ apiclient = (function () {
 				success: succ,
 				error: err
 			});
-		}
+		},
+		consultarHistorial: function (user, token, callback) {
+			console.log(user)
+			console.log(token)
+			console.log(user)
+			$.ajax({
+				method: "GET",
+				contentType: "application/json",
+				url: "https://synchdrive.herokuapp.com/servicios/"+user+"/recordDriver",
+				headers: { "Authorization": token },
+				success: function (respuesta) {
+					callback(respuesta)
+				},
+				error: function () {
+					console.log("No se ha podido obtener la información");
+				}
+			});
+		},
 		
 
 	}

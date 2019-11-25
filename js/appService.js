@@ -97,6 +97,7 @@ appService = (function () {
         });
 
     };
+
     var mostrarServicios = function () {
         console.log("--------------------------------")
         console.log(appService.webSocketActive)
@@ -126,24 +127,21 @@ appService = (function () {
     var aceptarService = function (id) {
         appService.webSocketActive.map(function (f) {
             if (f.idService == id) { 
-                appService.acceptService(f, publishAcceptService)
+                appEnServicio.acceptService(f, publishAcceptService)
             }
         });
-        
+        //location.href = "/EnServicio.html";
 
     }
     var publishAcceptService = function (service) {
         var list = appService.webSocketActive.filter(function (serv) {
             return serv.idPeticion !== service.idPeticion;
         });
-        console.log('sisoooooooooooooooooooooooooooooo')
         console.log(appService.webSocketActive)
-        console.log('sisaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
-        console.log(list)
         stompClient.send("/topic/accepted", {}, JSON.stringify(list));
         
     };
-    var acceptService = function (service, callback) {
+    /**var acceptService = function (service, callback) {
         console.log("Accepting... " + service);
         $.ajax({
             method: "PUT",
@@ -152,14 +150,15 @@ appService = (function () {
             data: JSON.stringify(service),
             headers: { "Authorization": sessionStorage.getItem('token') },
             success: function () {
-                console.log("Success");
+                location.href="/enServicio.html"
                 callback(service);
+
             },
             error: function () {
                 alert("ERROR ACCEPTING");
             }
         });
-    };
+    };*/
     return {
         connectAndSubscribeDriver: connectAndSubscribeDriver,
         initConexion: initConexion,
@@ -168,7 +167,6 @@ appService = (function () {
         cargarFiltros: cargarFiltros,
         mostrarServicios: mostrarServicios,
         webSocketActive: webSocketActive,
-        acceptService: acceptService,
         publishAcceptService: publishAcceptService,
         aceptarService: aceptarService
     }
