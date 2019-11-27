@@ -21,7 +21,7 @@ appMapa = (function () {
        
         funcion.apps.map(function (f) {
             console.log(f)
-            elementos += '<input type="checkbox" name="checkbox' + cont + '"id="' + f.name + '"onclick="">' +
+            elementos += '<input type="checkbox" name="checkbox' + cont + '"id="' + f.name + '"onclick="" checked>' +
                 '<label for="' + f.name + '">' + f.name + '</label>';
             cont += 1;
 
@@ -36,7 +36,7 @@ appMapa = (function () {
             '<label for="MoreExpensiveCareers">More Expensive Careers</label>' +
             '<input type="radio" name="TServices" id="NearbyDestination" onclick="appMapa.cargarFiltroDestino()">' +
             '<label for="NearbyDestination">Nearby Destination</label>'+
-            '<input type="radio" name="TServices" id="AllServices" onclick="appMapa.cargarFiltroDestino()">' +
+            '<input type="radio" name="TServices" id="AllServices" onclick="appMapa.cargarFiltroDestino()" checked>' +
             '<label for="AllServices">All Services</label>';
             
         $("#Tservices").html(elementos)
@@ -60,7 +60,7 @@ appMapa = (function () {
                     maximumAge: 0
                 };
                 apiclient.consultarDriver(sessionStorage.getItem('email'),sessionStorage.getItem('token'),menu)
-                appService.cargarFiltros()
+                //appService.cargarFiltros()
                 return navigator.geolocation.getCurrentPosition(cordenadaSuccess, cordenadasError, options);
             }
         },

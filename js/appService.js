@@ -5,8 +5,26 @@ appService = (function () {
     var listApps = []
     //Conductor se conecta a el stomp, con la lista de apps que tiene el conductor
     var initConexion = function () {
-        apiclient.consultarDriver(sessionStorage.getItem('email'), sessionStorage.getItem('token'), connectAndSubscribeDriver)
-        appService.BuscandoServicio();
+        apiclient.consultarDriver(sessionStorage.getItem('email'), sessionStorage.getItem('token'), appService.verificar)
+       
+    }
+    var verificar=function(f){
+        var num = 0;
+        console.log(appMapa.apps)
+        f.apps.map(function (f) {
+            ch = document.getElementById(f.name);
+            console.log(ch)
+            if (ch.checked == 1) {
+                num += 1;
+                console.log(num)
+            }
+        });
+        if(num<1){
+            alert(" please select an application")
+        }else{
+            apiclient.consultarDriver(sessionStorage.getItem('email'), sessionStorage.getItem('token'), appService.connectAndSubscribeDriver)
+            appService.BuscandoServicio();
+        }
     }
     var BuscandoServicio = function () {
         $("#BuscarServicio").html('<input type="button" value="Close Service" class="btn float-none login_btn" onclick="appService.cancelarBusqueda()">')
@@ -32,6 +50,8 @@ appService = (function () {
         $("#Tservices").html(elementos)
     }
     var cancelarBusqueda = function () {
+        appService.webSocketActive=[]
+        appService.mostrarServicios();
         stompClient = null;
         var list = $("input[type=radio]");
         list.map(function (f) {
@@ -103,24 +123,42 @@ appService = (function () {
         console.log(appService.webSocketActive)
         $("#serviciosActivos").html("");
         var elemento = '<thead><tr><th scope="col"><label for="">Service Requests:</label></th></tr><thead><tbody>';
-        appService.webSocketActive.map(function (f) {
-            listApps.map(function (fun) {
-                if (f.app.name.toLowerCase() == fun) {
-                    console.log(f)
-                    elemento += '<tr><td >' +
+        var servicioMasCaro=null;
+        console.log(appService.webSocketActive)
+        if ($('#MoreExpensiveCareers').is(':checked') && appService.webSocketActive.length>0) {
+            servicioMasCaro=appService.webSocketActive[0];
+            for(var i=1;i<appService.webSocketActive.length;i++){
+                if(appService.webSocketActive[i].price>=servicioMasCaro.price){
+                    servicioMasCaro=appService.webSocketActive[i]
+                }
+            }
+            f=servicioMasCaro;
+            elemento += '<tr><td >' +
                         "Email: " + f.customer.email + '<br>' +
                         "User Name: " + f.customer.userName + '<br>' +
                         "Price: " + f.price + '<br>' +
                         "Duration; " + f.duration + '<br>' +
                         '<input type="button" value="Accept Service"  onclick="appService.aceptarService(' + f.idService + ')"></input><br>' +
                         '</td></tr>';
-                }
+              
+        }else{
+            appService.webSocketActive.map(function (f) {
+                listApps.map(function (fun) {
+                    if (f.app.name.toLowerCase() == fun) {
+                        console.log(f)
+                        elemento += '<tr><td >' +
+                            "Email: " + f.customer.email + '<br>' +
+                            "User Name: " + f.customer.userName + '<br>' +
+                            "Price: " + f.price + '<br>' +
+                            "Duration; " + f.duration + '<br>' +
+                            '<input type="button" value="Accept Service"  onclick="appService.aceptarService(' + f.idService + ')"></input><br>' +
+                            '</td></tr>';
+                    }
+                });
+    
             });
-
-        });
+        }
         elemento += '</tbody>';
-
-
         $("#serviciosActivos").html(elemento);
     };
 
@@ -168,7 +206,8 @@ appService = (function () {
         mostrarServicios: mostrarServicios,
         webSocketActive: webSocketActive,
         publishAcceptService: publishAcceptService,
-        aceptarService: aceptarService
+        aceptarService: aceptarService,
+        verificar:verificar
     }
 
 })();
