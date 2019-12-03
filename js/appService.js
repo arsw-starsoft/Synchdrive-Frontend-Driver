@@ -106,7 +106,8 @@ appService = (function () {
             //Está pendiente de los servicios acceptados para eliminarlos
             stompClient.subscribe("/topic/accepted", function (eventBody) {
                 var object = JSON.parse(eventBody.body);
-
+                console.log("DIOSSSSSSSSSSSSSSSSSSSSSSSS")
+                console.log(object)
                 appService.webSocketActive = [];
                 object.forEach(function (obj) {
                     appService.webSocketActive.push(obj);
@@ -165,17 +166,30 @@ appService = (function () {
     var aceptarService = function (id) {
         appService.webSocketActive.map(function (f) {
             if (f.idService == id) { 
-                appEnServicio.acceptService(f, publishAcceptService)
+                appEnServicio.acceptService(f, appService.publishAcceptService)
             }
         });
         //location.href = "/EnServicio.html";
 
     }
     var publishAcceptService = function (service) {
+        //console.log(service)
         var list = appService.webSocketActive.filter(function (serv) {
-            return serv.idPeticion !== service.idPeticion;
+            if( service.customer.email!==serv.customer.email){
+                return true;
+            }else{
+                return serv.idPeticion !== service.idPeticion;
+            }
+            /**console.log(service.customer.email)
+            console.log(serv.customer.email)
+            console.log(serv.idPeticion !== service.idPeticion && service.customer.email!==serv.customer.email)
+            console.log(serv)
+            return serv.idPeticion !== service.idPeticion && service.customer.email!==serv.customer.email;*/
         });
+        console.log("----------------------------------------------asas-------")
+        console.log(list)
         console.log(appService.webSocketActive)
+        //appService.webSocketActive=list;
         stompClient.send("/topic/accepted", {}, JSON.stringify(list));
         
     };
