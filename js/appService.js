@@ -6,9 +6,9 @@ appService = (function () {
     //Conductor se conecta a el stomp, con la lista de apps que tiene el conductor
     var initConexion = function () {
         apiclient.consultarDriver(sessionStorage.getItem('email'), sessionStorage.getItem('token'), appService.verificar)
-       
+
     }
-    var verificar=function(f){
+    var verificar = function (f) {
         var num = 0;
         console.log(appMapa.apps)
         f.apps.map(function (f) {
@@ -19,9 +19,9 @@ appService = (function () {
                 console.log(num)
             }
         });
-        if(num<1){
+        if (num < 1) {
             alert(" please select an application")
-        }else{
+        } else {
             apiclient.consultarDriver(sessionStorage.getItem('email'), sessionStorage.getItem('token'), appService.connectAndSubscribeDriver)
             appService.BuscandoServicio();
         }
@@ -50,7 +50,7 @@ appService = (function () {
         $("#Tservices").html(elementos)
     }
     var cancelarBusqueda = function () {
-        appService.webSocketActive=[]
+        appService.webSocketActive = []
         appService.mostrarServicios();
         stompClient = null;
         var list = $("input[type=radio]");
@@ -100,7 +100,21 @@ appService = (function () {
             //Esta pendiente de los servicios cancelados para eliminarlos
             stompClient.subscribe("/topic/canceled", function (eventBody) {
                 var object = JSON.parse(eventBody.body);
-                console.log("Canceled... " + object);
+                console.log(object)
+                var list = appService.webSocketActive.filter(function (serv) {
+                    if (serv.customer.email !== object.email) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                });
+
+                appService.webSocketActive = [];
+                list.forEach(function (obj) {
+                    appService.webSocketActive.push(obj);
+                })
+                appService.mostrarServicios();
+                
             });
 
             //Está pendiente de los servicios acceptados para eliminarlos
@@ -124,25 +138,25 @@ appService = (function () {
         console.log(appService.webSocketActive)
         $("#serviciosActivos").html("");
         var elemento = '<thead><tr><th scope="col"><label for="">Service Requests:</label></th></tr><thead><tbody>';
-        var servicioMasCaro=null;
+        var servicioMasCaro = null;
         console.log(appService.webSocketActive)
-        if ($('#MoreExpensiveCareers').is(':checked') && appService.webSocketActive.length>0) {
-            servicioMasCaro=appService.webSocketActive[0];
-            for(var i=1;i<appService.webSocketActive.length;i++){
-                if(appService.webSocketActive[i].price>=servicioMasCaro.price){
-                    servicioMasCaro=appService.webSocketActive[i]
+        if ($('#MoreExpensiveCareers').is(':checked') && appService.webSocketActive.length > 0) {
+            servicioMasCaro = appService.webSocketActive[0];
+            for (var i = 1; i < appService.webSocketActive.length; i++) {
+                if (appService.webSocketActive[i].price >= servicioMasCaro.price) {
+                    servicioMasCaro = appService.webSocketActive[i]
                 }
             }
-            f=servicioMasCaro;
+            f = servicioMasCaro;
             elemento += '<tr><td >' +
-                        "Email: " + f.customer.email + '<br>' +
-                        "User Name: " + f.customer.userName + '<br>' +
-                        "Price: " + f.price + '<br>' +
-                        "Duration; " + f.duration + '<br>' +
-                        '<input type="button" value="Accept Service"  onclick="appService.aceptarService(' + f.idService + ')"></input><br>' +
-                        '</td></tr>';
-              
-        }else{
+                "Email: " + f.customer.email + '<br>' +
+                "User Name: " + f.customer.userName + '<br>' +
+                "Price: " + f.price + '<br>' +
+                "Duration; " + f.duration + '<br>' +
+                '<input type="button" value="Accept Service"  onclick="appService.aceptarService(' + f.idService + ')"></input><br>' +
+                '</td></tr>';
+
+        } else {
             appService.webSocketActive.map(function (f) {
                 listApps.map(function (fun) {
                     if (f.app.name.toLowerCase() == fun) {
@@ -156,7 +170,7 @@ appService = (function () {
                             '</td></tr>';
                     }
                 });
-    
+
             });
         }
         elemento += '</tbody>';
@@ -165,7 +179,7 @@ appService = (function () {
 
     var aceptarService = function (id) {
         appService.webSocketActive.map(function (f) {
-            if (f.idService == id) { 
+            if (f.idService == id) {
                 appEnServicio.acceptService(f, appService.publishAcceptService)
             }
         });
@@ -175,9 +189,9 @@ appService = (function () {
     var publishAcceptService = function (service) {
         //console.log(service)
         var list = appService.webSocketActive.filter(function (serv) {
-            if( service.customer.email!==serv.customer.email){
+            if (service.customer.email !== serv.customer.email) {
                 return true;
-            }else{
+            } else {
                 return serv.idPeticion !== service.idPeticion;
             }
             /**console.log(service.customer.email)
@@ -191,7 +205,7 @@ appService = (function () {
         console.log(appService.webSocketActive)
         //appService.webSocketActive=list;
         stompClient.send("/topic/accepted", {}, JSON.stringify(list));
-        
+
     };
     /**var acceptService = function (service, callback) {
         console.log("Accepting... " + service);
@@ -221,7 +235,7 @@ appService = (function () {
         webSocketActive: webSocketActive,
         publishAcceptService: publishAcceptService,
         aceptarService: aceptarService,
-        verificar:verificar
+        verificar: verificar
     }
 
 })();
