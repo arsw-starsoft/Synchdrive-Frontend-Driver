@@ -2,7 +2,8 @@ appService = (function () {
 
     var stompClient = null;
     var webSocketActive = [];
-    var listApps = []
+    var listApps = [];
+    var enServicio = false;
     //Conductor se conecta a el stomp, con la lista de apps que tiene el conductor
     var initConexion = function () {
         apiclient.consultarDriver(sessionStorage.getItem('email'), sessionStorage.getItem('token'), appService.verificar)
@@ -50,9 +51,10 @@ appService = (function () {
         $("#Tservices").html(elementos)
     }
     var cancelarBusqueda = function () {
-        appService.webSocketActive = []
+        appService.webSocketActive = [];
         appService.mostrarServicios();
-        stompClient = null;
+        appService.stompClient = null;
+        appService.enServicio = false;
         var list = $("input[type=radio]");
         list.map(function (f) {
             console.log('"#' + list[f].id + '"');
@@ -78,8 +80,8 @@ appService = (function () {
                 listApps.push(f.name)
             }
         });
-
         var socket = new SockJS("https://synchdrive.herokuapp.com/stompendpoint");
+        appService.enServicio = true;
         stompClient = Stomp.over(socket);
         stompClient.connect({}, function (frame) {
             console.log("Connected: " + frame);
@@ -88,14 +90,20 @@ appService = (function () {
                 stompClient.subscribe("/topic/services." + app.toLowerCase(), function (eventBody) {
                     var object = JSON.parse(eventBody.body);
                     serviciosActivos = object;
-
                     console.log(object)
                     object.forEach(function (s) {
-                        appService.webSocketActive.push(s);
+                        condicional = 0;
+                        appService.webSocketActive.map(function (f) {
+                            if (f.idService == s.idService) {
+                                condicional += 1
+                            }
+                        })
+                        if (condicional == 0) {
+                            appService.webSocketActive.push(s);
+                        }
                     });
                     appService.mostrarServicios();
                 })
-
             });
             //Esta pendiente de los servicios cancelados para eliminarlos
             stompClient.subscribe("/topic/canceled", function (eventBody) {
@@ -114,7 +122,7 @@ appService = (function () {
                     appService.webSocketActive.push(obj);
                 })
                 appService.mostrarServicios();
-                
+
             });
 
             //Está pendiente de los servicios acceptados para eliminarlos
@@ -157,6 +165,7 @@ appService = (function () {
                 '</td></tr>';
 
         } else {
+
             appService.webSocketActive.map(function (f) {
                 listApps.map(function (fun) {
                     if (f.app.name.toLowerCase() == fun) {
@@ -172,9 +181,16 @@ appService = (function () {
                 });
 
             });
+
+
         }
-        elemento += '</tbody>';
-        $("#serviciosActivos").html(elemento);
+        if (appService.enServicio) {
+            elemento += '</tbody>';
+            $("#serviciosActivos").html(elemento);
+        }else{
+            $("#serviciosActivos").html("");
+        }
+
     };
 
     var aceptarService = function (id) {
@@ -235,7 +251,9 @@ appService = (function () {
         webSocketActive: webSocketActive,
         publishAcceptService: publishAcceptService,
         aceptarService: aceptarService,
-        verificar: verificar
+        verificar: verificar,
+        stompClient: stompClient,
+        enServicio: enServicio
     }
 
 })();
