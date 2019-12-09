@@ -38,8 +38,8 @@ appMapa = (function () {
             '<label for="NearbyDestination">Nearby Destination</label>'+
             '<input type="radio" name="TServices" id="AllServices" onclick="appMapa.cargarFiltroDestino()" checked>' +
             '<label for="AllServices">All Services</label>';
-            
         $("#Tservices").html(elementos)
+        $("#NearbyDestination").prop('disabled', true)
     }
     var cargarFiltroDestino=function(){
         var elemento=""
@@ -47,6 +47,7 @@ appMapa = (function () {
             elemento='<label>Destination:</label>  <input id="Destination" type="text">';
         }
         $("#Ldestino").html(elemento)
+        $("#NearbyDestination").prop('disabled', true)
     }
     return {
         getCordenadas: function (name) {

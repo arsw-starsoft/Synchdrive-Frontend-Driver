@@ -70,6 +70,7 @@ appService = (function () {
             $('#' + list[f].id).prop('disabled', false);
         });
         $("#BuscarServicio").html('<input type="button" value="Activate Service" class="btn float-none login_btn" onclick="appService.initConexion()">')
+        $("#NearbyDestination").prop('disabled', true)
     }
     var connectAndSubscribeDriver = function (funcion) {
         listApps = [];
@@ -177,10 +178,11 @@ appService = (function () {
                     if (f.app.name.toLowerCase() == fun) {
                         console.log(f)
                         elemento += '<tr><td >' +
-                            "Email: " + f.customer.email + '<br>' +
+                            "App: " + f.app.name + '<br>' +
                             "User Name: " + f.customer.userName + '<br>' +
                             "Price: " + f.price + '<br>' +
                             "Duration; " + f.duration + '<br>' +
+                            "Destination: " + f.destino + '<br>' +
                             '<input type="button" value="Accept Service"  onclick="appService.aceptarService(' + f.idService + ')"></input><br>' +
                             '</td></tr>';
                     }
