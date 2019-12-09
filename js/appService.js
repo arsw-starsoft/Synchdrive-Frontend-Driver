@@ -4,6 +4,7 @@ appService = (function () {
     var webSocketActive = [];
     var listApps = [];
     var enServicio = false;
+    var ServicioTomado=null;
     //Conductor se conecta a el stomp, con la lista de apps que tiene el conductor
     var initConexion = function () {
         apiclient.consultarDriver(sessionStorage.getItem('email'), sessionStorage.getItem('token'), appService.verificar)
@@ -137,6 +138,11 @@ appService = (function () {
                 appService.mostrarServicios();
 
             });
+            stompClient.subscribe("/topic/acpp", function (eventBody) {
+                var object = JSON.parse(eventBody.body);
+                console.log(eventBody);
+               
+            });
         });
 
     };
@@ -199,7 +205,7 @@ appService = (function () {
                 appEnServicio.acceptService(f, appService.publishAcceptService)
             }
         });
-        //location.href = "/EnServicio.html";
+       
 
     }
     var publishAcceptService = function (service) {
@@ -221,6 +227,10 @@ appService = (function () {
         console.log(appService.webSocketActive)
         //appService.webSocketActive=list;
         stompClient.send("/topic/accepted", {}, JSON.stringify(list));
+        console.log(service.idService)
+        //stompClient.send("/topic/acpp", {},service);
+        sessionStorage.setItem("IdService",service.idService);
+        location.href = "/EnServicio.html";
 
     };
     /**var acceptService = function (service, callback) {
@@ -253,7 +263,8 @@ appService = (function () {
         aceptarService: aceptarService,
         verificar: verificar,
         stompClient: stompClient,
-        enServicio: enServicio
+        enServicio: enServicio,
+        ServicioTomado:ServicioTomado
     }
 
 })();
