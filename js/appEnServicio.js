@@ -31,7 +31,7 @@ appEnServicio = (function () {
                     callback(service);
                 },
                 error: function () {
-                    alert("ERROR ACCEPTING");
+                    alert("ESTE SERVICIO YA HA SIDO TOMADO");
                 }
             });
 
