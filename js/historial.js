@@ -2,7 +2,7 @@ appHistorial = (function () {
     var cargarHistorial = function () {
         if (sessionStorage.getItem('email') == null) {
             alert("Permiso denegado, debe logearse primero.")
-            location.href = "/loginUser.html"
+            location.href = "/loginDriver.html"
         } else {
             apiclient.consultarHistorial(sessionStorage.getItem('email'), sessionStorage.getItem('token'), appHistorial.generarTabla)
         }
